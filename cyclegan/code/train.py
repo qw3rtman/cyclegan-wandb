@@ -28,7 +28,7 @@ import wandb
 if __name__ == '__main__':
     opt = TrainOptions().parse()   # get training options
 
-    wandb.init(dir='/scratch/cluster/nimit', project='CycleGAN')
+    wandb.init(dir='/scratch/cluster/nimit', project='CycleGAN-Cityscapes2Vizdoom')
     wandb.config.update(opt)
 
     dataset = create_dataset(opt)  # create a dataset given opt.dataset_mode and other options
@@ -61,6 +61,12 @@ if __name__ == '__main__':
                 model.compute_visuals()
                 visualizer.display_current_results(model.get_current_visuals(), epoch, save_result)
 
+                # Log visualizations
+                model.compute_visuals()
+                visuals = model.get_current_visuals()
+                pred_log = [wandb.Image(y, caption=x) for x, y in visuals.items()]
+                wandb.log({"Prediction Samples": pred_log}, commit=False)
+
             if total_iters % opt.print_freq == 0:    # print training losses and save logging information to the disk
                 losses = model.get_current_losses()
                 t_comp = (time.time() - iter_start_time) / opt.batch_size
@@ -74,11 +80,7 @@ if __name__ == '__main__':
                 model.save_networks(save_suffix)
 
             iter_data_time = time.time()
-            # Log visualizations and losses
-            model.compute_visuals()
-            visuals = model.get_current_visuals()
-            pred_log = [wandb.Image(y, caption=x) for x, y in visuals.items()]
-            wandb.log({"Prediction Samples": pred_log}, commit=False)
+            # Log losses
             losses = model.get_current_losses()
             wandb.log(losses)
         if epoch % opt.save_epoch_freq == 0:              # cache our model every <save_epoch_freq> epochs
