@@ -3,7 +3,7 @@ source $HOME/.zshrc
 
 conda env list
 
-cd $HOME/Documents/robomaster/sim2real-experiments/cyclegan/pytorch-CycleGAN-and-pix2pix
+cd $HOME/Documents/robomaster/sim2real-experiments/cyclegan
 
 source activate robo
 
