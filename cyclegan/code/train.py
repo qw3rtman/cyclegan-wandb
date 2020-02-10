@@ -28,7 +28,7 @@ import wandb
 if __name__ == '__main__':
     opt = TrainOptions().parse()   # get training options
 
-    wandb.init(dir='/scratch/cluster/nimit', project='CycleGAN-Cityscapes2Vizdoom')
+    wandb.init(dir='/scratch/cluster/nimit', entity='dji_project', project='test')
     wandb.config.update(opt)
 
     dataset = create_dataset(opt)  # create a dataset given opt.dataset_mode and other options
